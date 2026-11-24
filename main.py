@@ -16,7 +16,9 @@ def gate_check(text):
     """Return True only if text passes the bounty gate.
 
     The gate requires UTF-8 text of 1 to 200 characters, not only
-    whitespace, and a single line.
+    whitespace, and a single line. Surrounding whitespace is also
+    rejected: an entry must start and end with a visible character,
+    so a stray leading/trailing space cannot slip through.
     """
     if not isinstance(text, str):
         return False
@@ -27,6 +29,8 @@ def gate_check(text):
     if not 1 <= len(text) <= 200:
         return False
     if not text.strip():
+        return False
+    if text != text.strip():
         return False
     if "\n" in text or "\r" in text:
         return False
